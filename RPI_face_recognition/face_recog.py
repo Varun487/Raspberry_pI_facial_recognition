@@ -48,9 +48,9 @@ def classify_face(im):
     known_face_names = list(faces.keys())
 
     img = cv2.imread(im, 1)
-    #img = cv2.resize(img, (0, 0), fx=0.5, fy=0.5)
-    #img = img[:,:,::-1]
- 
+    # img = cv2.resize(img, (0, 0), fx=0.5, fy=0.5)
+    # img = img[:,:,::-1]
+
     face_locations = face_recognition.face_locations(img)
     unknown_face_encodings = face_recognition.face_encodings(img, face_locations)
 
@@ -70,20 +70,34 @@ def classify_face(im):
 
         for (top, right, bottom, left), name in zip(face_locations, face_names):
             # Draw a box around the face
-            cv2.rectangle(img, (left-20, top-20), (right+20, bottom+20), (255, 0, 0), 2)
+            cv2.rectangle(img, (left - 20, top - 20), (right + 20, bottom + 20), (255, 0, 0), 2)
 
             # Draw a label with a name below the face
-            cv2.rectangle(img, (left-20, bottom -15), (right+20, bottom+20), (255, 0, 0), cv2.FILLED)
+            cv2.rectangle(img, (left - 20, bottom - 15), (right + 20, bottom + 20), (255, 0, 0), cv2.FILLED)
             font = cv2.FONT_HERSHEY_DUPLEX
-            cv2.putText(img, name, (left -20, bottom + 15), font, 1.0, (255, 255, 255), 2)
-
+            cv2.putText(img, name, (left - 20, bottom + 15), font, 1.0, (255, 255, 255), 2)
 
     # Display the resulting image
     while True:
 
         cv2.imshow('Video', img)
         if cv2.waitKey(1) & 0xFF == ord('q'):
-            return face_names 
+            return face_names
 
+def take_registration_picture(controller):
+    # code to take a picture here
+    # redirect in case of successful registration
+    successful_registration = 0
 
-print(classify_face("test.jpg"))
+    if successful_registration:
+        controller.show_frame("RegisterSuccess")
+    else:
+        controller.show_frame("RegisterFailed")
+
+def grant_access(controller):
+    granted = 0
+
+    if granted:
+        controller.show_frame("AccessGranted")
+    else:
+        controller.show_frame("AccessDenied")
