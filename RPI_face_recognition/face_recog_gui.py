@@ -23,7 +23,7 @@ class App(tk.Tk):
         container.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
-        for F in (StartPage, RegistrationPage, PasswordFailed, RegisterSuccess, RegisterFailed, Authenticate, AccessDenied, AccessGranted):
+        for F in (StartPage, RegistrationPage, PasswordFailed, RegisterSuccess, RegisterFailed, Authenticate, AccessDenied, AccessGranted, RegisterName):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
             self.frames[page_name] = frame
@@ -105,13 +105,48 @@ class RegistrationPage(tk.Frame):
         password.pack()
 
         button = tk.Button(self, text="Register",
-                           command=lambda: take_registration_picture(controller) if (password.get() == "a")
+                           command=lambda: controller.show_frame("RegisterName") if (password.get() == "a")
                            else controller.show_frame("PasswordFailed"),
                            background="blue",
                            foreground="white"
                            )
         button.pack(side="bottom")
 
+class RegisterName(tk.Frame):
+
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        self.controller = controller
+
+        self.configure(bg="black")
+
+        titleLabel = tk.Label(self,
+                              text="Registration",
+                              font=controller.title_font,
+                              background="black",
+                              foreground="white",
+                              width=100,
+                              )
+        titleLabel.pack(side="top", fill="x", pady=10)
+
+        infoLabel = tk.Label(self,
+                             text="Please enter your name and stand infront of the camera, then press the button below",
+                             font=controller.title_font,
+                             background="black",
+                             foreground="white",
+                             width=80
+                             )
+        infoLabel.pack(side="top", fill="x", pady=10)
+
+        name = tk.Entry(self)
+        name.pack()
+
+        button = tk.Button(self, text="Register",
+                           command=lambda: take_registration_picture(controller, name.get()),
+                           background="blue",
+                           foreground="white"
+                           )
+        button.pack(side="bottom")
 
 class PasswordFailed(tk.Frame):
     def __init__(self, parent, controller):
@@ -177,7 +212,7 @@ class RegisterFailed(tk.Frame):
                          foreground="red",
                          width=100,
                          height=10
-        )
+                        )
         label.pack(side="top", fill="x", pady=10)
 
         button = tk.Button(self, text="Back",
@@ -196,13 +231,22 @@ class Authenticate(tk.Frame):
 
         self.configure(bg="black")
 
-        label = tk.Label(self, text="Please be in front of the camera and press the button below to authenticate", font=controller.title_font,
+        label = tk.Label(self, text="Please be in front of the camera and press the button to authenticate", font=controller.title_font,
                          background="black",
                          foreground="white",
                          width=100,
-                         height=10
+                         height=5
                          )
-        label.pack(side="top", fill="x", pady=10)
+        label.pack(side="top", fill="x", pady=5)
+        
+        label1 = tk.Label(self, text="Please press any key after the image is shown to complete authentication", font=controller.title_font,
+                         background="black",
+                         foreground="white",
+                         width=100,
+                         height=5
+                         )
+        label1.pack(side="top", fill="x", pady=5)
+        
         button = tk.Button(self, text="Authenticate",
                            command=lambda: grant_access(controller),
                            background="blue",

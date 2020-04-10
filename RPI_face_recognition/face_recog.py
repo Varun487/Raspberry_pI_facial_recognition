@@ -4,7 +4,7 @@ import cv2
 import face_recognition
 import numpy as np
 from time import sleep
-
+import os
 
 def get_encoded_faces():
     """
@@ -78,28 +78,45 @@ def classify_face(im):
             cv2.putText(img, name, (left - 20, bottom + 15), font, 1.0, (255, 255, 255), 2)
 
     # Display the resulting image
-    while True:
-        cv2.imshow('Video', img)
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            return face_names
+    
+    imS = cv2.resize(img, (1000, 1000))
+    
+    cv2.imshow('Video', imS)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+    
+    return face_names
         
 
-def take_registration_picture(controller):
-    # code to take a picture here
-    # redirect in case of successful registration
+def take_registration_picture(controller, name):
     successful_registration = 0
+    
+    names = []
 
-    if successful_registration:
+    for picture in list(os.walk(os.getcwd()))[2][2]:
+        names.append(picture[:-4])
+    
+    if name not in names:
+        os.system('raspistill -o /home/pi/Documents/mpca_project/RPI_face_recognition/faces/{}.jpg'.format(name))
         controller.show_frame("RegisterSuccess")
+    
     else:
         controller.show_frame("RegisterFailed")
 
 def grant_access(controller):
-    granted = 0
-
-    if granted:
+    
+    os.system('rm /home/pi/Documents/mpca_project/RPI_face_recognition/test.jpg')
+    os.system('raspistill -o /home/pi/Documents/mpca_project/RPI_face_recognition/test.jpg')
+    
+    faces = classify_face("test.jpg")
+    
+    while 'Unknown' in faces:
+        faces.remove('Unknown')
+    
+    print(faces)
+    
+    if faces:
         controller.show_frame("AccessGranted")
     else:
         controller.show_frame("AccessDenied")
 
-print(classify_face("test.jpg"))
