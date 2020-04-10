@@ -79,10 +79,10 @@ def classify_face(im):
 
     # Display the resulting image
     while True:
-
         cv2.imshow('Video', img)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             return face_names
+        
 
 def take_registration_picture(controller):
     # code to take a picture here
@@ -101,3 +101,5 @@ def grant_access(controller):
         controller.show_frame("AccessGranted")
     else:
         controller.show_frame("AccessDenied")
+
+print(classify_face("test.jpg"))

@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import font as tkfont
 
-from RPI_face_recognition.face_recog import *
+from face_recog import *
 
 
 class App(tk.Tk):
@@ -97,7 +97,7 @@ class RegistrationPage(tk.Frame):
                              font=controller.title_font,
                              background="black",
                              foreground="white",
-                             width=100
+                             width=80
                              )
         infoLabel.pack(side="top", fill="x", pady=10)
 
@@ -137,6 +137,7 @@ class PasswordFailed(tk.Frame):
                            )
         button.pack()
 
+
 class RegisterSuccess(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
@@ -160,6 +161,7 @@ class RegisterSuccess(tk.Frame):
                            foreground="white"
                            )
         button.pack()
+
 
 class RegisterFailed(tk.Frame):
     def __init__(self, parent, controller):
@@ -208,6 +210,7 @@ class Authenticate(tk.Frame):
                            )
         button.pack()
 
+
 class AccessGranted(tk.Frame):
 
     def __init__(self, parent, controller):
@@ -227,6 +230,7 @@ class AccessGranted(tk.Frame):
                            foreground="white"
                            )
         button.pack()
+
 
 class AccessDenied(tk.Frame):
 
